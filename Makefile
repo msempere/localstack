@@ -2,7 +2,7 @@ AWS_STS_URL = http://central.maven.org/maven2/com/amazonaws/aws-java-sdk-sts/1.1
 ES_URL = https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/zip/elasticsearch/2.3.3/elasticsearch-2.3.3.zip
 	TMP_ARCHIVE_ES = /tmp/localstack.es.zip
 
-install: instal-libs compile
+install: install-libs compile
 
 install-libs:
 	(pip install --upgrade pip)
