@@ -7,9 +7,9 @@ install: install-libs compile
 install-libs:
 	(pip install --upgrade pip)
 	(test ! -e requirements.txt || (pip install -r requirements.txt))
-	(test -e localstack/infra/elasticsearch || { mkdir -p localstack/infra; cd localstack/infra; test -f $(TMP_ARCHIVE_ES) || (curl -o $(TMP_ARCHIVE_ES) $(ES_URL)); cp $(TMP_ARC
-	(test -e localstack/infra/amazon-kinesis-client/aws-java-sdk-sts.jar || { mkdir -p localstack/infra/amazon-kinesis-client; curl -o localstack/infra/amazon-kinesis-cl
-	(cd localstack/ && (test ! -e package.json || (npm install)))
+	(test -e localstack/infra/elasticsearch || { mkdir -p localstack/infra; cd localstack/infra; test -f $(TMP_ARCHIVE_ES) || (curl -o $(TMP_ARCHIVE_ES) $(ES_URL)); cp $(TMP_ARCHIVE_ES) es.zip; unzip -q es.zip; mv elasticsearch* elasticsearch; rm es.zip; }) && \
+		(test -e localstack/infra/amazon-kinesis-client/aws-java-sdk-sts.jar || { mkdir -p localstack/infra/amazon-kinesis-client; curl -o localstack/infra/amazon-kinesis-client/aws-java-sdk-sts.jar $(AWS_STS_URL); }) && \
+		(cd localstack/ && (test ! -e package.json || (npm install)))
 
 install-web:
 	(cd localstack/dashboard/web && (test ! -e package.json || npm install))
@@ -24,8 +24,9 @@ infra:
 web:
 	($(bin/localstack web --port=8081)
 
-test: lint
-	PYTHONPATH=`pwd` nosetests --with-coverage --logging-level=WARNING --nocapture --no-skip --exe --cover-erase --cover-tests --cover-inclusive --cover-package=localstack --wit
+test: 
+	PYTHONPATH=`pwd` nosetests --with-coverage --logging-level=WARNING --nocapture --no-skip --exe --cover-erase --cover-tests --cover-inclusive --cover-package=localstack --with-xunit . && \
+			   python lint
 
 lint:
 	(pep8 --max-line-length=120 --ignore=E128 --exclude=node_modules,legacy,dist .)
