@@ -21,7 +21,6 @@ setup-venv:
 install-libs:      ## Install npm/pip dependencies, compile code
 	(test -e localstack/infra/elasticsearch || { mkdir -p localstack/infra; cd localstack/infra; test -f $(TMP_ARCHIVE_ES) || (curl -o $(TMP_ARCHIVE_ES) $(ES_URL)); cp $(TMP_ARCHIVE_ES) es.zip; unzip -q es.zip; mv elasticsearch* elasticsearch; rm es.zip; }) && \
 		(test -e localstack/infra/amazon-kinesis-client/aws-java-sdk-sts.jar || { mkdir -p localstack/infra/amazon-kinesis-client; curl -o localstack/infra/amazon-kinesis-client/aws-java-sdk-sts.jar $(AWS_STS_URL); }) && \
-		(npm install -g npm || sudo npm install -g npm) && \
 		(cd localstack/ && (test ! -e package.json || (npm install)))
 
 install-web:       ## Install npm dependencies for dashboard Web UI
