@@ -26,7 +26,7 @@ web:
 
 test: 
 	PYTHONPATH=`pwd` nosetests --with-coverage --logging-level=WARNING --nocapture --no-skip --exe --cover-erase --cover-tests --cover-inclusive --cover-package=localstack --with-xunit . && \
-			   python lint
+			   make lint
 
 lint:
 	(pep8 --max-line-length=120 --ignore=E128 --exclude=node_modules,legacy,dist .)
